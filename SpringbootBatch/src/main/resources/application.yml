@@ -1,0 +1,33 @@
+#共通
+
+
+#指定bean所在包
+#指定映射文件
+mybatis:
+  type-aliases-package: jp.co.tonoyo.longchamp.model
+  config-locations: classpath:mybatis/mybatis-config.xml
+  mapperLocations: classpath:jp/co/drm/**/integration/mybatis/sqlmap/*.xml
+
+# spring.profiles.activeにアクティブなプロファイルを指定する
+spring:
+  profiles:
+    active: dev
+  messages:
+    basename: msg
+    cache-seconds: -1
+    encoding: UTF-8
+
+# "---"でプロファイルを区切る
+# spring.profilesにプロファイル名を書く
+---
+#「開発環境」
+spring:
+  profiles: dev
+---
+#「テスト環境」
+spring:
+  profiles: test
+---
+#「本番環境」
+spring:
+  profiles: production
