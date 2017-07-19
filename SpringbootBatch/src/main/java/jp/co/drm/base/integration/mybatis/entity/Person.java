@@ -2,6 +2,10 @@ package jp.co.drm.base.integration.mybatis.entity;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 public class Person implements Serializable {
     /**
      *
@@ -19,6 +23,8 @@ public class Person implements Serializable {
      *
      * @mbg.generated Thu Jul 13 14:13:22 JST 2017
      */
+	@NotBlank
+	@Size(max = 20)
     private String firstName;
 
     /**

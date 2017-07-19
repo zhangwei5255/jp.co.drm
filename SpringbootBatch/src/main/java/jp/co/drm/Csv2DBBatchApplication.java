@@ -22,7 +22,7 @@ import org.springframework.core.io.ClassPathResource;
 
 import jp.co.drm.base.integration.mybatis.dao.PersonDao;
 import jp.co.drm.base.integration.mybatis.entity.Person;
-import jp.co.drm.batch.config.chunk.PersonItemProcessor;
+import jp.co.drm.batch.chunk.processor.PersonItemProcessor;
 
 //@SpringBootApplication(scanBasePackages={"com.sample.commons", "com.sample.product"})
 @SpringBootApplication(scanBasePackages = { "jp.co.drm" }) // デフォルト：当クラスのpackage
@@ -41,6 +41,9 @@ public class Csv2DBBatchApplication {
 	@Autowired
 	private SqlSessionFactory sqlSessionFactory;
 
+	@Autowired
+	private ItemReader<Person> csvItemReader2;
+
 	@Bean
 	public Job jobCsv2Db() throws Exception {
 		System.out.println("jobCsv2Db: build");
@@ -50,7 +53,10 @@ public class Csv2DBBatchApplication {
 	@Bean
 	protected Step stepCsv2Db() throws Exception {
 		System.out.println("stepCsv2Db: build");
-		return steps.get("stepCsv2Db").<Person, Person>chunk(10).reader(csvItemReader()).processor(processor())
+		/*return steps.get("stepCsv2Db").<Person, Person>chunk(10).reader(csvItemReader()).processor(processor())
+				.writer(myBatisItemReader()).build();*/
+		// csvItemReaderメソッドを別のクラスに格納する場合
+		return steps.get("stepCsv2Db").<Person, Person>chunk(10).reader(csvItemReader2).processor(processor())
 				.writer(myBatisItemReader()).build();
 	}
 
