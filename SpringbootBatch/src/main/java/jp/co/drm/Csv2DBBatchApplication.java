@@ -57,7 +57,7 @@ public class Csv2DBBatchApplication {
 				.writer(myBatisItemReader()).build();*/
 		// csvItemReaderメソッドを別のクラスに格納する場合
 		return steps.get("stepCsv2Db").<Person, Person>chunk(10).reader(csvItemReader2).processor(processor())
-				.writer(myBatisItemReader()).build();
+				.writer(myBatisItemWriter()).build();
 	}
 
 	@Bean
@@ -101,7 +101,7 @@ public class Csv2DBBatchApplication {
 
 
 	@Bean
-	public ItemWriter<Person> myBatisItemReader() {
+	public ItemWriter<Person> myBatisItemWriter() {
 		MyBatisBatchItemWriter<Person> writer = new MyBatisBatchItemWriter<Person>();
 		writer.setSqlSessionFactory(sqlSessionFactory);
 		// reader.setParameterValues(parameterValues);
