@@ -20,8 +20,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 
+import jp.co.drm.base.integration.mybatis.dao.PersonDao;
 import jp.co.drm.base.integration.mybatis.entity.Person;
-import jp.co.drm.batch.config.processor.PersonItemProcessor;
+import jp.co.drm.batch.config.chunk.PersonItemProcessor;
 
 //@SpringBootApplication(scanBasePackages={"com.sample.commons", "com.sample.product"})
 @SpringBootApplication(scanBasePackages = { "jp.co.drm" }) // デフォルト：当クラスのpackage
@@ -98,7 +99,10 @@ public class Csv2DBBatchApplication {
 		MyBatisBatchItemWriter<Person> writer = new MyBatisBatchItemWriter<Person>();
 		writer.setSqlSessionFactory(sqlSessionFactory);
 		// reader.setParameterValues(parameterValues);
-		writer.setStatementId("jp.co.drm.base.integration.mybatis.dao.PersonDao.insert");
+		//PersonDao.class.getName()
+
+		//writer.setStatementId("jp.co.drm.base.integration.mybatis.dao.PersonDao.insert");
+		writer.setStatementId(PersonDao.class.getName() + ".insert");
 
 		return writer;
 	}
