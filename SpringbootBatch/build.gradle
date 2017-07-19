@@ -53,4 +53,7 @@ dependencies {
 	compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+
+	//validatorチェック
+	compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.4.0.Final'
 }
