@@ -24,6 +24,7 @@ public class SendMailReaderConfig {
 
 		//writer.setStatementId("jp.co.drm.base.integration.mybatis.dao.PersonDao.insert");
 		reader.setQueryId(PersonDao.class.getName() + ".selectAll");
+		System.out.println("sendMalItemReader start");
 
 		return reader;
 	}
