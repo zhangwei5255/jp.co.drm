@@ -8,11 +8,13 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+
 @Configuration
 public class SpringContextConfig {
 
 	@Value("${spring.datasource.url}")
-    private  String dbUrl;
+	private String dbUrl;
 
 	@Value("${spring.datasource.username}")
 	private String username;
@@ -23,24 +25,25 @@ public class SpringContextConfig {
 	@Value("${spring.datasource.driverClassName}")
 	private String driverClassName;
 
-    @Bean
-    public MessageSource messageSource() {
-    	ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("classpath:ErrorResources", "classpath:ErrorResources2");
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
-    }
+	@Bean
+	public MessageSource messageSource() {
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+		messageSource.setBasenames("classpath:ErrorResources", "classpath:ErrorResources2");
+		messageSource.setDefaultEncoding("UTF-8");
+		return messageSource;
+	}
 
 	// destroy-method="close"的作用是当数据库连接不使用的时候,就把该连接重新放到数据池中,方便下次使用调用.
-	//WEB APP
+	// WEB APP
 	// バッチなら、エラー「springbatch Failed to unregister the JMX name
-	//原因：SpringでBasicDataSourceを二回目にクローズしようとした
-	//1.BasicDataSource close itself automatically when application close
-	//2.Spring use default destroy method to close DataSource but it's already closed
-	//@Bean(destroyMethod = "close")
-	@Bean(destroyMethod = "")					//バッチ 接続：１回のみ
+	// 原因：SpringでBasicDataSourceを二回目にクローズしようとした
+	// 1.BasicDataSource close itself automatically when application close
+	// 2.Spring use default destroy method to close DataSource but it's already
+	// closed
+	// @Bean(destroyMethod = "close")
+	@Bean(destroyMethod = "") // バッチ 接続：１回のみ
 	public DataSource dataSource() {
-		//DBCP2のデータソースを使う
+		// DBCP2のデータソースを使う
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setUrl(dbUrl);
 		dataSource.setUsername(username);// 用户名
@@ -57,5 +60,12 @@ public class SpringContextConfig {
 		return dataSource;
 	}
 
+	@Bean
+	public DataSourceTransactionManager transactionManager() {
+		DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
+		transactionManager.setDataSource(dataSource());
+
+		return transactionManager;
+	}
 
 }
