@@ -4,7 +4,6 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -19,7 +18,7 @@ import org.springframework.context.annotation.Bean;
 //@SpringBootApplication(scanBasePackages={"com.sample.commons", "com.sample.product"})
 @SpringBootApplication(scanBasePackages = { "jp.co.drm" }) // デフォルト：当クラスのpackage
 @MapperScan("jp.co.drm.**.integration.mybatis.dao")
-@EnableBatchProcessing
+//@EnableBatchProcessing
 public class TaskletBatchApplication {
 
 	@Autowired

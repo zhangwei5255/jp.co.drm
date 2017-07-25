@@ -28,7 +28,7 @@ public class SpringContextConfig {
 	@Bean
 	public MessageSource messageSource() {
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-		messageSource.setBasenames("classpath:ErrorResources", "classpath:ErrorResources2");
+		messageSource.setBasenames("classpath:ErrorResources", "classpath:ErrorResources2", "classpath:AwsCredentials");
 		messageSource.setDefaultEncoding("UTF-8");
 		return messageSource;
 	}

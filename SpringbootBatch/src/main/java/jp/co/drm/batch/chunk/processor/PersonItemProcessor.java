@@ -12,7 +12,6 @@ import org.springframework.validation.DataBinder;
 import org.springframework.validation.Validator;
 
 import jp.co.drm.base.integration.mybatis.entity.Person;
-import jp.co.drm.batch.step.skip.StepSkipException;
 
 public class PersonItemProcessor implements ItemProcessor<Person, Person> {
 
@@ -36,9 +35,9 @@ public class PersonItemProcessor implements ItemProcessor<Person, Person> {
 			List<String> errMsgs = result.getAllErrors().stream().map(p -> p.toString()).collect(Collectors.toList());
 
 			// 処理方法１ return null
-			// return null; // ItemProcessorでnullを返すとエラーデータのみが後続のWriterで処理されない
+			 return null; // ItemProcessorでnullを返すとエラーデータのみが後続のWriterで処理されない
 			// 処理方法２ throw Exception データが全てWriterで処理されない
-			throw new StepSkipException(errMsgs);
+			//throw new StepSkipException(errMsgs);
 		}
 
 		String firstName = person.getFirstName().toUpperCase();

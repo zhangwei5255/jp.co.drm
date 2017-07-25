@@ -67,4 +67,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.apache.velocity/velocity
 	compile group: 'org.apache.velocity', name: 'velocity', version: '1.7'
 
+	// https://mvnrepository.com/artifact/net.coobird/thumbnailator
+	compile group: 'net.coobird', name: 'thumbnailator', version: '0.4.8'
+
+		// https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk
+	compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.126'
+
 }

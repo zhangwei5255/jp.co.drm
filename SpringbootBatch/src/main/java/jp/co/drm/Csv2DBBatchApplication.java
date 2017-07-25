@@ -5,7 +5,6 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.batch.MyBatisBatchItemWriter;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemReader;
@@ -27,7 +26,7 @@ import jp.co.drm.batch.chunk.processor.PersonItemProcessor;
 //@SpringBootApplication(scanBasePackages={"com.sample.commons", "com.sample.product"})
 @SpringBootApplication(scanBasePackages = { "jp.co.drm" }) // デフォルト：当クラスのpackage
 @MapperScan("jp.co.drm.**.integration.mybatis.dao")
-@EnableBatchProcessing
+//@EnableBatchProcessing
 public class Csv2DBBatchApplication {
 
 	 private final static String FILE_NAME = "sample-data.csv";
