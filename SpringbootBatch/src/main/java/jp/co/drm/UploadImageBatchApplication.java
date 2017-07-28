@@ -67,7 +67,7 @@ public class UploadImageBatchApplication {
 				.processor(imageItemProcessor)
 				.writer(imageFileItemWriter)
 				.taskExecutor(taskExecutor)
-				.throttleLimit(5)			//在单个step中多线程执行任务
+				.throttleLimit(10)			//在单个step中多线程执行任务
 				.build();
 
 
