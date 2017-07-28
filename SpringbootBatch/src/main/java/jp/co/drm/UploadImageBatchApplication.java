@@ -5,7 +5,6 @@ import java.io.File;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemReader;
@@ -17,11 +16,12 @@ import org.springframework.context.annotation.Bean;
 
 import jp.co.drm.batch.chunk.processor.ImageItemProcessor;
 import jp.co.drm.batch.item.dto.ImageDto;
+import jp.co.drm.listener.job.UploadImageJobExecutionListener;
 
 //@SpringBootApplication(scanBasePackages={"com.sample.commons", "com.sample.product"})
 @SpringBootApplication(scanBasePackages = { "jp.co.drm" }) // デフォルト：当クラスのpackage
 @MapperScan("jp.co.drm.**.integration.mybatis.dao")
-@EnableBatchProcessing
+//@EnableBatchProcessing
 public class UploadImageBatchApplication {
 
 
@@ -45,9 +45,9 @@ public class UploadImageBatchApplication {
 
 
 	@Bean
-	public Job jobSendMail() throws Exception {
+	public Job jobUploadImage() throws Exception {
 		System.out.println("jobUploadImage: build");
-		return this.jobs.get("jobUploadImage").start(stepUploadImage()).build();
+		return this.jobs.get("jobUploadImage").start(stepUploadImage()).listener(new UploadImageJobExecutionListener()) .build();
 	}
 
 	@Bean

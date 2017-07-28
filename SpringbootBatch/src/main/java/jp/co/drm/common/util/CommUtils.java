@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
@@ -45,6 +46,14 @@ public class CommUtils {
 	public static  List<File> getFilsOfDir(String homeDir){
 		return getFilsOfDir(new File(homeDir));
 
+
+	}
+
+	public static  List<String> getFileNamesOfDir(String homeDir){
+		List<File> lstFile = getFilsOfDir(homeDir);
+		List<String> ret = lstFile.stream()
+				.map(p -> p.getPath()).collect(Collectors.toList());
+		return ret;
 
 	}
 
