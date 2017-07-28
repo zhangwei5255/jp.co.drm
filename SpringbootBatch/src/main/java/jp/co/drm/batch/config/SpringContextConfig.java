@@ -8,6 +8,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 @Configuration
@@ -66,6 +67,14 @@ public class SpringContextConfig {
 		transactionManager.setDataSource(dataSource());
 
 		return transactionManager;
+	}
+
+
+	@Bean
+	public SimpleAsyncTaskExecutor taskExecutor(){
+		SimpleAsyncTaskExecutor task = new SimpleAsyncTaskExecutor();
+		task.setConcurrencyLimit(100);
+		return task;
 	}
 
 }

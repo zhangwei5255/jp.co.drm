@@ -5,6 +5,7 @@ import java.io.File;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemReader;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
 import jp.co.drm.batch.chunk.processor.ImageItemProcessor;
 import jp.co.drm.batch.item.dto.ImageDto;
@@ -21,7 +23,7 @@ import jp.co.drm.listener.job.UploadImageJobExecutionListener;
 //@SpringBootApplication(scanBasePackages={"com.sample.commons", "com.sample.product"})
 @SpringBootApplication(scanBasePackages = { "jp.co.drm" }) // デフォルト：当クラスのpackage
 @MapperScan("jp.co.drm.**.integration.mybatis.dao")
-//@EnableBatchProcessing
+@EnableBatchProcessing
 public class UploadImageBatchApplication {
 
 
@@ -43,6 +45,9 @@ public class UploadImageBatchApplication {
 	@Autowired
 	private ItemWriter<ImageDto> imageFileItemWriter;
 
+	@Autowired
+	private SimpleAsyncTaskExecutor taskExecutor;
+
 
 	@Bean
 	public Job jobUploadImage() throws Exception {
@@ -56,8 +61,14 @@ public class UploadImageBatchApplication {
 		/*return steps.get("stepCsv2Db").<Person, Person>chunk(10).reader(csvItemReader()).processor(processor())
 				.writer(myBatisItemReader()).build();*/
 		// csvItemReaderメソッドを別のクラスに格納する場合
-		return steps.get("stepUploadImage").<File, ImageDto>chunk(10).reader(imageFileItemReader).processor(imageItemProcessor)
-				.writer(imageFileItemWriter).build();
+		return steps.get("stepUploadImage")
+				.<File, ImageDto>chunk(10)
+				.reader(imageFileItemReader)
+				.processor(imageItemProcessor)
+				.writer(imageFileItemWriter)
+				.taskExecutor(taskExecutor)
+				.throttleLimit(5)			//在单个step中多线程执行任务
+				.build();
 
 
 	/*	return steps.get("stepUploadImage").<File, ImageDto>chunk(10).reader(imageFileItemReader).processor(imageItemProcessor)
