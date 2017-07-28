@@ -7,13 +7,11 @@ import java.util.Locale;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Component;
 
 import jp.co.drm.aws.AWSClient;
 import jp.co.drm.batch.item.dto.ImageDto;
 import jp.co.drm.common.util.MessageSoureUtils;
 
-@Component
 public class ImageFileItemWriter implements ItemWriter<ImageDto> {
 
 	@Autowired

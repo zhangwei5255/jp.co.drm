@@ -24,7 +24,7 @@ public class ImageItemProcessor implements ItemProcessor<File, ImageDto> {
 	MessageSource messageSource;
 
 	@Override
-	public ImageDto process(File item) throws Exception {
+	public  ImageDto process(File item) throws Exception {
 		File waterPic = new File(messageSource.getMessage("water_mark_path", null, Locale.getDefault()));
 
 		File origin = item;

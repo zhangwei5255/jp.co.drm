@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import jp.co.drm.batch.item.file.ImageFileItemReader;
+import jp.co.drm.batch.item.file.PartitionImageFileItemReader;
 
 @Configuration
 public class UploadImageReaderConfig {
@@ -23,5 +24,14 @@ public class UploadImageReaderConfig {
 		ImageFileItemReader reader = new ImageFileItemReader(imageHome);
 		return reader;
 	}
+
+
+	@Bean
+	public ItemReader<File> partitionImageFileItemReader() {
+		PartitionImageFileItemReader reader = new PartitionImageFileItemReader();
+		return reader;
+	}
+
+
 
 }

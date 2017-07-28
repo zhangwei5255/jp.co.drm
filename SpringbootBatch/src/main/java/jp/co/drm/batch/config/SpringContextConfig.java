@@ -1,5 +1,7 @@
 package jp.co.drm.batch.config;
 
+import java.util.Locale;
+
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -8,7 +10,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+
+import jp.co.drm.batch.partition.ImagePartitioner;
 
 @Configuration
 public class SpringContextConfig {
@@ -66,6 +71,21 @@ public class SpringContextConfig {
 		transactionManager.setDataSource(dataSource());
 
 		return transactionManager;
+	}
+
+	@Bean
+	public SimpleAsyncTaskExecutor taskExecutor(){
+		SimpleAsyncTaskExecutor task = new SimpleAsyncTaskExecutor();
+		//task.setConcurrencyLimit(100);
+		return task;
+	}
+
+	@Bean
+	public ImagePartitioner imagePartitioner(){
+		String imageHome = messageSource().getMessage("image_home", null, Locale.getDefault());
+		ImagePartitioner partitoin = new ImagePartitioner(imageHome);
+
+		return partitoin;
 	}
 
 }
