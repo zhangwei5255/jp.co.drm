@@ -3,6 +3,12 @@ package jp.co.drm.batch.item.file;
 import java.io.File;
 import java.util.List;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.ItemReadListener;
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
@@ -25,13 +31,15 @@ import jp.co.drm.common.util.CommUtils;
  * @author Robert Kasanicky
  * @param <T>
  */
-public class ImageFileItemReader implements ItemReader<File> {
+public class ImageFileItemReader implements ItemReader<File>, ItemReadListener<File> ,StepExecutionListener  {
 
+	private  final Logger logger = LogManager.getLogger(this.getClass());
 	private List<File> imgs;
 	private int nextIndex;
 
 	public ImageFileItemReader(String imgHome) {
 		imgs = CommUtils.getFilsOfDir(imgHome);
+		logger.info("画像件数：" + imgs.size());
 	}
 
 	@Override
@@ -44,7 +52,42 @@ public class ImageFileItemReader implements ItemReader<File> {
 			nextIndex++;
 		}
 
+
 		return nextFile;
+	}
+
+	@Override
+	public void beforeRead() {
+
+
+	}
+
+	@Override
+	public void afterRead(File item) {
+
+
+	}
+
+	@Override
+	public void onReadError(Exception ex) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+
+
+	@Override
+	public void beforeStep(StepExecution stepExecution) {
+		// TODO 自動生成されたメソッド・スタブ
+		logger.info("beforeStep画像件数：" + imgs.size());
+		stepExecution.getExecutionContext().put("imageTotals", imgs.size() );
+
+	}
+
+	@Override
+	public ExitStatus afterStep(StepExecution stepExecution) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
 	}
 
 

@@ -4,6 +4,11 @@ import java.text.Normalizer;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -14,7 +19,11 @@ import jp.co.drm.batch.item.dto.ImageDto;
 import jp.co.drm.common.util.MessageSoureUtils;
 
 @Component
-public class ImageFileItemWriter implements ItemWriter<ImageDto> {
+public class ImageFileItemWriter implements ItemWriter<ImageDto>, StepExecutionListener {
+	private static int cnt = 0;
+	private int totals;
+
+	private  final Logger logger = LogManager.getLogger(this.getClass());
 
 	@Autowired
 	AWSClient awsClient;
@@ -32,7 +41,6 @@ public class ImageFileItemWriter implements ItemWriter<ImageDto> {
 		String updatePath;
 
 		awsClient.init();
-
 
 		for(ImageDto dto : items){
 			String fileName = dto.getOrigin().getName();
@@ -54,8 +62,27 @@ public class ImageFileItemWriter implements ItemWriter<ImageDto> {
 					+ Normalizer.normalize(fileName, Normalizer.Form.NFKC);
 			awsClient.uploadFileWithReadAccess(dto.getS(), bucketName, updatePath);
 
+			cnt++;
+
+			logger.info(cnt + "/" +  totals);
+
 		}
 
+	}
+
+
+	@Override
+	public void beforeStep(StepExecution stepExecution) {
+		// TODO 自動生成されたメソッド・スタブ
+		 totals = (int)stepExecution.getExecutionContext().get("imageTotals" );
+
+	}
+
+
+	@Override
+	public ExitStatus afterStep(StepExecution stepExecution) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
 	}
 
 
